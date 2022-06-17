@@ -1,0 +1,33 @@
+package com.mss.blood.donation.entities;
+
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+public class BloodRecipient {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private String contact;
+
+    private String email;
+
+    private String bloodGroupName;
+
+    private String address;
+
+    @OneToMany(mappedBy = "bloodRecipient", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<BloodDonationHistory> bloodDonationHistories;
+
+}
