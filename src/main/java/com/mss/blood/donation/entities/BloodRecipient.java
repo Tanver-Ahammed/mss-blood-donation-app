@@ -19,6 +19,8 @@ public class BloodRecipient {
 
     private String name;
 
+    private Integer age;
+
     private String contact;
 
     private String email;
@@ -26,6 +28,10 @@ public class BloodRecipient {
     private String bloodGroupName;
 
     private String address;
+
+    private String image;
+
+    private String password;
 
     @OneToMany(mappedBy = "bloodRecipient", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BloodDonationHistory> bloodDonationHistories;

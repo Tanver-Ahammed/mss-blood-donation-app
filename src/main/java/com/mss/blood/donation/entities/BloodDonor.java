@@ -20,6 +20,8 @@ public class BloodDonor {
 
     private String name;
 
+    private Integer age;
+
     private String contact;
 
     private String email;

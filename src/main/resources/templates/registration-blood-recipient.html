@@ -12,25 +12,25 @@
 
         <div class="row">
             <div class="col-lg-7 col-md-6 col-sm-6 container justify-content-center card">
-                <h1 class="text-center"> Add New Blood Donor </h1>
+                <h1 class="text-center"> Add New Blood Recipient </h1>
                 <div>
                     <p th:text="${message}" style="color: #318043; text-align: center"></p>
                 </div>
                 <div class="card-body">
 
-                    <!--student form started....-->
-                    <form th:action="@{/blood/donor/save}" th:object="${bloodDonorDTO}" method="post"
-                          enctype="multipart/form-data" onsubmit="return bloodDonorFormValidator()">
+                    <!--blood recipient form started....-->
+                    <form th:action="@{/blood/recipient/save}" th:object="${bloodRecipientDTO}" method="post"
+                          enctype="multipart/form-data" onsubmit="return bloodRecipientFormValidator()">
 
-                        <!--blood donor name div....-->
+                        <!--blood recipient name div....-->
                         <div class="mb-3">
-                            <label for="name" class="form-label">Blood Donor Name</label>
+                            <label for="name" class="form-label">Blood Recipient Name</label>
                             <input
                                     type="text"
                                     id="name"
                                     name="name"
                                     th:field="*{name}"
-                                    th:value="${bloodDonorDTO.name}"
+                                    th:value="${bloodRecipientDTO.name}"
                                     th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"
                                     required="required"
                                     class="form-control"
@@ -40,72 +40,97 @@
                             <div
                                     th:each="e : ${#fields.errors('name')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorName"
+                                    id="validationServer03FeedbackBloodRecipientName"
+                                    class="invalid-feedback">
+                            </div>
+                        </div>
+
+                        <!--blood recipient age div....-->
+                        <div class="mb-3">
+                            <label for="age" class="form-label">Blood Recipient's Age</label>
+                            <input
+                                    type="number"
+                                    id="age"
+                                    name="age"
+                                    min="0"
+                                    max="130"
+                                    th:field="*{age}"
+                                    th:value="${bloodRecipientDTO.age}"
+                                    th:classappend="${#fields.hasErrors('age') ? 'is-invalid' : ''}"
+                                    required="required"
+                                    class="form-control"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientAge"
+                            >
+                            <span id="ageMessage" style="color: red"></span>
+                            <div
+                                    th:each="e : ${#fields.errors('age')}"
+                                    th:text="${e}"
+                                    id="validationServer03FeedbackBloodRecipientAge"
                                     class="invalid-feedback">
                             </div>
                         </div>
 
 
-                        <!--blood donor contact div....-->
+                        <!--blood recipient contact div....-->
                         <div class="mb-3">
-                            <label for="contact" class="form-label">Blood Donor Contact Number</label>
+                            <label for="contact" class="form-label">Blood Recipient Contact Number</label>
                             <input
                                     type="text"
                                     id="contact"
                                     name="contact"
                                     th:field="*{contact}"
-                                    th:value="${bloodDonorDTO.contact}"
+                                    th:value="${bloodRecipientDTO.contact}"
                                     th:classappend="${#fields.hasErrors('contact') ? 'is-invalid' : ''}"
                                     required="required"
                                     class="form-control"
-                                    aria-describedby="validationServer03FeedbackBloodDonorContact"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientContact"
                             >
                             <span id="contactMessage" style="color: red"></span>
                             <div
                                     th:each="e : ${#fields.errors('contact')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorContact"
+                                    id="validationServer03FeedbackBloodRecipientContact"
                                     class="invalid-feedback">
                             </div>
                         </div>
 
-                        <!--blood donor email div....-->
+                        <!--blood recipient email div....-->
                         <div class="mb-3">
-                            <label for="email" class="form-label">Blood Donor Email</label>
+                            <label for="email" class="form-label">Blood Recipient Email</label>
                             <input
                                     type="email"
                                     id="email"
                                     name="email"
                                     th:field="*{email}"
-                                    th:value="${bloodDonorDTO.email}"
+                                    th:value="${bloodRecipientDTO.email}"
                                     th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}"
                                     required="required"
                                     class="form-control"
-                                    aria-describedby="validationServer03FeedbackBloodDonorEmail"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientEmail"
                             >
                             <span id="emailMessage" style="color: red"></span>
                             <div
                                     th:each="e : ${#fields.errors('email')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorEmail"
+                                    id="validationServer03FeedbackBloodRecipientEmail"
                                     class="invalid-feedback">
                             </div>
                         </div>
 
-                        <!--blood donor blood group div....-->
+                        <!--blood recipient blood group div....-->
                         <div class="mb-3">
-                            <label for="bloodGroupName" class="form-label">Blood Donor's Blood Group</label>
+                            <label for="bloodGroupName" class="form-label">Blood Recipient's Blood Group</label>
                             <select
                                     class="form-select"
                                     type="text"
                                     id="bloodGroupName"
                                     name="bloodGroupName"
                                     th:field="*{bloodGroupName}"
-                                    th:value="${bloodDonorDTO.bloodGroupName}"
+                                    th:value="${bloodRecipientDTO.bloodGroupName}"
                                     th:classappend="${#fields.hasErrors('bloodGroupName') ? 'is-invalid' : ''}"
                                     required="required"
                                     aria-label="Default select example"
-                                    aria-describedby="validationServer03FeedbackBloodDonorEmail"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientEmail"
                             >
                                 <!--<option selected>Open this select menu</option>-->
                                 <option value="A+">A+</option>
@@ -121,85 +146,85 @@
                             <div
                                     th:each="e : ${#fields.errors('email')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorBloodGroup"
+                                    id="validationServer03FeedbackBloodRecipientBloodGroup"
                                     class="invalid-feedback">
                             </div>
                         </div>
 
-                        <!--blood donor address div....-->
+                        <!--blood recipient address div....-->
                         <div class="mb-3">
-                            <label for="address" class="form-label">Blood Donor Address</label>
+                            <label for="address" class="form-label">Blood Recipient Address</label>
                             <input
                                     type="text"
                                     id="address"
                                     name="address"
                                     th:field="*{address}"
-                                    th:value="${bloodDonorDTO.address}"
+                                    th:value="${bloodRecipientDTO.address}"
                                     th:classappend="${#fields.hasErrors('address') ? 'is-invalid' : ''}"
                                     required="required"
                                     class="form-control"
-                                    aria-describedby="validationServer03FeedbackBloodDonorAddress"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientAddress"
                             >
                             <span id="addressMessage" style="color: red"></span>
                             <div
                                     th:each="e : ${#fields.errors('address')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorAddress"
+                                    id="validationServer03FeedbackBloodRecipientAddress"
                                     class="invalid-feedback">
                             </div>
                         </div>
 
-                        <!--blood donor image div-->
+                        <!--blood recipient image div-->
                         <div class="mb-3">
-                            <label for="bloodDonorImage" class="form-label">Book's Image</label>
+                            <label for="bloodRecipientImage" class="form-label">Book's Image</label>
                             <input
                                     type="file"
-                                    id="bloodDonorImage"
-                                    name="bloodDonorImage"
+                                    id="bloodRecipientImage"
+                                    name="bloodRecipientImage"
                                     accept="image/*"
-                                    th:value="${bloodDonorDTO.image}"
+                                    th:value="${bloodRecipientDTO.image}"
                                     required="required"
                                     class="form-control"
                                     aria-describedby="emailHelp">
                         </div>
 
-                        <!--student password div....-->
+                        <!--blood recipient password div....-->
                         <div class="mb-3">
-                            <label for="bloodDonorPassword" class="form-label">Blood Donor's Password</label>
+                            <label for="bloodRecipientPassword" class="form-label">Blood Recipient's Password</label>
                             <input
                                     type="password"
-                                    id="bloodDonorPassword"
+                                    id="bloodRecipientPassword"
                                     class="form-control"
                                     th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}"
-                                    aria-describedby="validationServer03FeedbackBloodDonorPasswordPassword"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientPasswordPassword"
                             >
                             <span id="passwordMessage" style="color: red"></span>
                             <div
                                     th:each="e : ${#fields.errors('password')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorPasswordPassword"
+                                    id="validationServer03FeedbackBloodRecipientPasswordPassword"
                                     class="invalid-feedback">
                             </div>
                         </div>
 
-                        <!--blood donor confirm password div....-->
+                        <!--blood recipient confirm password div....-->
                         <div class="mb-3">
-                            <label for="bloodDonorConfirmPassword" class="form-label">Blood Donor's Confirm
+                            <label for="bloodRecipientConfirmPassword" class="form-label">Blood Recipient's Confirm
                                 Password</label>
                             <input
                                     type="password"
-                                    id="bloodDonorConfirmPassword"
+                                    id="bloodRecipientConfirmPassword"
                                     name="password"
                                     th:field="*{password}"
                                     th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}"
                                     class="form-control"
-                                    aria-describedby="validationServer03FeedbackBloodDonorConfirmPassword"
+                                    aria-describedby="validationServer03FeedbackBloodRecipientConfirmPassword"
                             >
                             <span id="confirmPasswordMessage" style="color: red"></span>
                             <div
                                     th:each="e : ${#fields.errors('password')}"
                                     th:text="${e}"
-                                    id="validationServer03FeedbackBloodDonorConfirmPassword"
+                                    id="validationServer03FeedbackBloodRecipientConfirmPassword"
                                     class="invalid-feedback">
                             </div>
                         </div>
@@ -212,7 +237,7 @@
                         <button type="reset" class="btn btn-primary">Reset</button>
                         <button type="submit" class="btn btn-success">Submit</button>
                     </form>
-                    <!--blood donor form started....-->
+                    <!--blood recipient form started....-->
 
                 </div>
             </div>

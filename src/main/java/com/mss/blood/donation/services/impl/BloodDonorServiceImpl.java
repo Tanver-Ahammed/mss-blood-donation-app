@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
 public class BloodDonorServiceImpl implements BloodDonorService {
@@ -29,7 +30,10 @@ public class BloodDonorServiceImpl implements BloodDonorService {
 
     // add blood donor
     @Override
-    public BloodDonorDTO addBloodDonor(BloodDonorDTO bloodDonorDTO, MultipartFile bloodDonorImage) throws IOException {
+    public BloodDonorDTO registrationBloodDonor(BloodDonorDTO bloodDonorDTO, MultipartFile bloodDonorImage) throws IOException {
+        if (Objects.equals(bloodDonorImage.getOriginalFilename(), "")) {
+            return null;
+        }
         String bloodDonorImageName = this.fileService.uploadImage(path, bloodDonorImage);
         bloodDonorDTO.setImage(bloodDonorImageName);
         bloodDonorDTO.setAvailable(true);
