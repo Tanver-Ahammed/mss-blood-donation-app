@@ -44,6 +44,10 @@ public class BloodRecipientDTO {
     @NotEmpty
     private String password;
 
+    private String verificationCode;
+
+    private String role;
+
     private List<BloodDonationHistory> bloodDonationHistories;
 
 }

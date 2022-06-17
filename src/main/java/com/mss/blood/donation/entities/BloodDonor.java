@@ -34,6 +34,10 @@ public class BloodDonor {
 
     private String password;
 
+    private String verificationCode;
+
+    private String role;
+
     private boolean isAvailable;
 
     private Date lastBloodDonationDate;

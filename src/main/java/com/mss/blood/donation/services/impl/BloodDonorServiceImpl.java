@@ -1,16 +1,22 @@
 package com.mss.blood.donation.services.impl;
 
+import com.mss.blood.donation.config.AppConstants;
 import com.mss.blood.donation.dto.BloodDonorDTO;
+import com.mss.blood.donation.email.EmailSenderService;
 import com.mss.blood.donation.entities.BloodDonor;
+import com.mss.blood.donation.exception.ResourceNotFoundException;
 import com.mss.blood.donation.repository.BloodDonorRepository;
 import com.mss.blood.donation.services.BloodDonorService;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
 @Service
@@ -25,6 +31,9 @@ public class BloodDonorServiceImpl implements BloodDonorService {
     @Autowired
     private FileServiceImpl fileService;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
     @Value("${project.image}")
     private String path;
 
@@ -36,12 +45,50 @@ public class BloodDonorServiceImpl implements BloodDonorService {
         }
         String bloodDonorImageName = this.fileService.uploadImage(path, bloodDonorImage);
         bloodDonorDTO.setImage(bloodDonorImageName);
-        bloodDonorDTO.setAvailable(true);
-        return this
-                .modelMapper
-                .map(this.bloodDonorRepository
-                                .save(this.modelMapper
-                                        .map(bloodDonorDTO, BloodDonor.class)),
-                        BloodDonorDTO.class);
+        bloodDonorDTO.setAvailable(false);
+        String verificationCode = RandomString.make(64);
+        bloodDonorDTO.setVerificationCode(verificationCode);
+        BloodDonor bloodDonor = this.modelMapper.map(bloodDonorDTO, BloodDonor.class);
+        bloodDonorDTO = this.modelMapper.map(this.bloodDonorRepository.save(bloodDonor), BloodDonorDTO.class);
+        String siteURL = AppConstants.host + "/blood/donor/verify";
+        sendVerificationEmail(bloodDonorDTO, siteURL);
+        return bloodDonorDTO;
+    }
+
+    @Override
+    public BloodDonorDTO getSingleStudentById(Long bloodDonorId) {
+        BloodDonor bloodDonor = this.bloodDonorRepository.findById(bloodDonorId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Blood Donor", "id", bloodDonorId));
+        return this.modelMapper.map(bloodDonor, BloodDonorDTO.class);
+    }
+
+    // verifying student by email
+    @Override
+    public boolean verifyBloodDonor(long id, String verifyCode) {
+        BloodDonorDTO bloodDonorDTO = getSingleStudentById(id);
+        if (bloodDonorDTO.getVerificationCode().equals(verifyCode)) {
+            bloodDonorDTO.setAvailable(true);
+            bloodDonorDTO.setVerificationCode(RandomString.make(64));
+            this.bloodDonorRepository.save(this.modelMapper.map(bloodDonorDTO, BloodDonor.class));
+            return true;
+        }
+        return false;
+    }
+
+    // send email for verification
+    private void sendVerificationEmail(BloodDonorDTO bloodDonorDTO, String siteURL) {
+        String subject = "Please, Verify your registration";
+        siteURL += "/" + bloodDonorDTO.getId() + "/" + bloodDonorDTO.getVerificationCode();
+        String emailContent = "<p><b>Dear " + bloodDonorDTO.getName() + ",</b></p>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h1><a href=\"" + siteURL + "\" target=\"_self\">VERIFY</a></h1>"
+                + "Thank you,<br>"
+                + "ICT, MBSTU.";
+        try {
+            this.emailSenderService.sendEmailWithoutAttachment(bloodDonorDTO.getEmail(), subject, emailContent);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

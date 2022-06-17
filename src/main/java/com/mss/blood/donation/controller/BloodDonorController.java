@@ -30,8 +30,8 @@ public class BloodDonorController {
     // save blood donor
     @PostMapping(path = "/save")
     public String registrationBloodDonor(@Valid @ModelAttribute("bloodDonorDTO") BloodDonorDTO bloodDonorDTO, BindingResult result,
-                                 @RequestParam(value = "bloodDonorImage", required = false) MultipartFile bloodDonorImage,
-                                 Model model) throws IOException {
+                                         @RequestParam(value = "bloodDonorImage", required = false) MultipartFile bloodDonorImage,
+                                         Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("bloodDonorDTO", bloodDonorDTO);
             System.err.println(result);
@@ -47,6 +47,18 @@ public class BloodDonorController {
         model.addAttribute("bloodDonorDTO", new BloodDonorDTO());
         model.addAttribute("message", "blood donor is successfully added...");
         return "registration-blood-donor";
+    }
+
+    @GetMapping(path = "/verify/{id}/{verifyCode}")
+    public String verifyBloodDonor(@PathVariable("id") Integer id,
+                                @PathVariable("verifyCode") String verifyCode,
+                                Model model) {
+        boolean isMatch = this.bloodDonorService.verifyBloodDonor(id, verifyCode);
+        if (isMatch)
+            model.addAttribute("message", "Your email verifying successfully....");
+        else
+            model.addAttribute("message", "Your email don't verifying successfully....");
+        return "home";
     }
 
 }

@@ -33,6 +33,10 @@ public class BloodRecipient {
 
     private String password;
 
+    private String verificationCode;
+
+    private String role;
+
     @OneToMany(mappedBy = "bloodRecipient", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BloodDonationHistory> bloodDonationHistories;
 

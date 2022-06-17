@@ -11,4 +11,8 @@ public interface BloodDonorService {
 
     BloodDonorDTO registrationBloodDonor(BloodDonorDTO bloodDonorDTO, MultipartFile bloodDonorImage) throws IOException;
 
+    BloodDonorDTO getSingleStudentById(Long id);
+
+    boolean verifyBloodDonor(long id, String verifyCode);
+
 }
