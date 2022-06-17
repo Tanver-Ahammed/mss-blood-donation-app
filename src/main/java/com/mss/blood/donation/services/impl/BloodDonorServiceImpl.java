@@ -17,6 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -55,12 +59,40 @@ public class BloodDonorServiceImpl implements BloodDonorService {
         return bloodDonorDTO;
     }
 
+    // get a single blood donor
     @Override
     public BloodDonorDTO getSingleStudentById(Long bloodDonorId) {
         BloodDonor bloodDonor = this.bloodDonorRepository.findById(bloodDonorId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Blood Donor", "id", bloodDonorId));
         return this.modelMapper.map(bloodDonor, BloodDonorDTO.class);
+    }
+
+    // get all blood donor
+    @Override
+    public List<BloodDonorDTO> getAllBloodDonor() {
+        return this.bloodDonorRepository.findAll()
+                .stream()
+                .map(bloodDonor -> this.modelMapper
+                        .map(bloodDonor, BloodDonorDTO.class))
+                .toList();
+    }
+
+    // get all active blood donor
+    @Override
+    public List<BloodDonorDTO> getAllActiveBloodDonor() {
+        return this.bloodDonorRepository.findAll()
+                .stream()
+                // blood donor is interested donate blood
+                .filter(BloodDonor::isAvailable)
+                // last blood donation more than 40 days or null
+                .filter(bloodDonor -> bloodDonor.getLastBloodDonationDate() == null ||
+                        ChronoUnit.DAYS.between(LocalDate.now(),
+                                bloodDonor.getLastBloodDonationDate().toInstant()
+                                        .atZone(ZoneId.systemDefault()).toLocalDate()) > 40)
+                .map(bloodDonor -> this.modelMapper
+                        .map(bloodDonor, BloodDonorDTO.class))
+                .toList();
     }
 
     // verifying student by email
@@ -77,14 +109,15 @@ public class BloodDonorServiceImpl implements BloodDonorService {
     }
 
     // send email for verification
-    private void sendVerificationEmail(BloodDonorDTO bloodDonorDTO, String siteURL) {
+    @Override
+    public void sendVerificationEmail(BloodDonorDTO bloodDonorDTO, String siteURL) {
         String subject = "Please, Verify your registration";
         siteURL += "/" + bloodDonorDTO.getId() + "/" + bloodDonorDTO.getVerificationCode();
         String emailContent = "<p><b>Dear " + bloodDonorDTO.getName() + ",</b></p>"
                 + "Please click the link below to verify your registration:<br>"
                 + "<h1><a href=\"" + siteURL + "\" target=\"_self\">VERIFY</a></h1>"
                 + "Thank you,<br>"
-                + "ICT, MBSTU.";
+                + "MSS, Blood Donation App.";
         try {
             this.emailSenderService.sendEmailWithoutAttachment(bloodDonorDTO.getEmail(), subject, emailContent);
         } catch (MessagingException | UnsupportedEncodingException e) {

@@ -28,17 +28,22 @@ public class BloodRecipientServiceImpl implements BloodRecipientService {
     @Value("${project.image}")
     private String path;
 
+    // registration blood recipient
     @Override
     public BloodRecipientDTO registrationBloodRecipient(BloodRecipientDTO bloodRecipientDTO, MultipartFile bloodRecipientImage) throws IOException {
         if (!Objects.equals(bloodRecipientImage.getOriginalFilename(), "")) {
             String bloodDonorImageName = this.fileService.uploadImage(path, bloodRecipientImage);
             bloodRecipientDTO.setImage(bloodDonorImageName);
         }
-        return this
-                .modelMapper
-                .map(this.bloodRecipientRepository
-                                .save(this.modelMapper
-                                        .map(bloodRecipientDTO, BloodRecipient.class)),
-                        BloodRecipientDTO.class);
+        return this.modelMapper.map(this.bloodRecipientRepository
+                        .save(this.modelMapper.map(bloodRecipientDTO, BloodRecipient.class)),
+                BloodRecipientDTO.class);
     }
+
+    // get a single blood donor
+
+
+    // get all blood recipient
+
+
 }

@@ -19,7 +19,7 @@ public class BloodRecipientController {
     @Autowired
     private BloodRecipientServiceImpl bloodRecipientService;
 
-    // registration blood recipient
+    // registration blood recipient api
     @GetMapping(path = "/registration")
     public String registrationBloodRecipient(Model model) {
         model.addAttribute("bloodRecipientDTO", new BloodRecipientDTO());
@@ -27,7 +27,7 @@ public class BloodRecipientController {
         return "registration-blood-recipient";
     }
 
-    // save blood recipient
+    // save blood recipient api
     @PostMapping(path = "/save")
     public String registrationBloodRecipient(@Valid @ModelAttribute("bloodRecipientDTO") BloodRecipientDTO bloodRecipientDTO, BindingResult result,
                                          @RequestParam(value = "bloodRecipientImage", required = false) MultipartFile bloodRecipientImage,

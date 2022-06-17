@@ -9,6 +9,8 @@ import java.io.IOException;
 @Service
 public interface BloodRecipientService {
 
-    BloodRecipientDTO registrationBloodRecipient(BloodRecipientDTO bloodRecipientDTO, MultipartFile bloodRecipientImage) throws IOException;
+    // registration blood recipient
+    BloodRecipientDTO registrationBloodRecipient(BloodRecipientDTO bloodRecipientDTO, MultipartFile bloodRecipientImage)
+            throws IOException;
 
 }
