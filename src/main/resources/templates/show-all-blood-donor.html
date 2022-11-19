@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>MSS - Blood Donation App</title>
+</head>
+<body>
+
+<section>
+
+    <div class="container">
+        <div class="row row-cols-3">
+            <div th:if="${bloodDonorDTOS.isEmpty()}">
+                <td colspan="3"> No Dealer Available Now!!</td>
+            </div>
+            <div th:each="bloodDonorDTO : ${bloodDonorDTOS}">
+                <div class="card" style="width: 18rem; height: 30rem;">
+                    <img th:src="@{${'/image/' + bloodDonorDTO.image}}"
+                         height="250" width="150"
+                         class="card-img-top" alt="Not Available Image">
+                    <div class="card-body">
+                        <h5 class="card-title"
+                            th:text="${'' + bloodDonorDTO.name + ' ('+bloodDonorDTO.bloodGroupName+')'}"></h5>
+                        <p class="" th:text="${'' + bloodDonorDTO.contact}"></p>
+                        <p class="" th:text="${'' + bloodDonorDTO.email}"></p>
+                        <p class="" th:text="${'' + bloodDonorDTO.address}"></p>
+                        <a th:href="@{${'/blood/donation/request/' + bloodDonorDTO.id}}" class="btn btn-success">Request
+                            For Blood
+                            Donation</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br><br>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org"-->
+<!--      th:replace="base::layout(~{::section})">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>ICT - Library Management System</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<section>-->
+
+<!--    <div class="container">-->
+<!--        <h1 style="text-align: center">Student List</h1>-->
+<!--        &lt;!&ndash;        <p style="text-align: center; color: darkcyan" th:text="${message}"></p>&ndash;&gt;-->
+<!--        <div class="row row-cols-3">-->
+<!--            <div th:if="${bloodDonorDTOS.isEmpty()}">-->
+<!--                <td colspan="3"> No records</td>-->
+<!--            </div>-->
+<!--            <div th:each="bloodDonorDTO : ${bloodDonorDTOS}">-->
+<!--                <div class="card mb-3">-->
+<!--                    <div class="row g-0">-->
+<!--                        <div class="col-md-4">-->
+<!--                            <img th:src="@{${'/image/' + bloodDonorDTO.image}}" class="img-fluid rounded-start"-->
+<!--                                 alt="Not Available Image">-->
+<!--                        </div>-->
+<!--                        <div class="col-md-8">-->
+<!--                            <div class="card-body">-->
+<!--                                <h5 class="card-title" th:text="${'Name: ' + bloodDonorDTO.name}">Card title</h5>-->
+<!--                                <p class="card-text" th:text="${'Contact: ' + bloodDonorDTO.contact}"></p>-->
+<!--                                <p class="card-text" th:text="${'Contact: ' + bloodDonorDTO.email}"></p>-->
+<!--                                <p class="card-text" th:text="${'Contact: ' + bloodDonorDTO.bloodGroupName}"></p>-->
+<!--                                <p class="card-text" th:text="${'Contact: ' + bloodDonorDTO.address}"></p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="card-body">-->
+<!--&lt;!&ndash;                            <a th:href="@{${'/student/get/' + studentDTO.id}}" class="btn btn-success">Details</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a th:href="@{${'/borrow/student/' + studentDTO.id}}" class="btn btn-success">Add Books</a>&ndash;&gt;-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <br>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="container">-->
+
+<!--    </div>-->
+<!--</section>-->
+
+<!--</body>-->
+<!--</html>-->
